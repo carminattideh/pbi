@@ -1,5 +1,5 @@
 let
-    AnoInicial = 2020,
+    AnoInicial = 2023,
     AnoFinal = Date.Year(DateTime.LocalNow()),
     DataInicial = Date.StartOfYear(#date(AnoInicial, 1, 1)),
     DataFinal = Date.EndOfYear(#date(AnoFinal, 12, 31)),
@@ -9,7 +9,7 @@ let
     AlteraTipo = Table.TransformColumnTypes(ConvertTabela, {{"Column1", type date}}),
     RenomeiaColuna = Table.RenameColumns(AlteraTipo,{"Column1", "Data"}),
     Ano = Table.AddColumn(RenomeiaColuna, "Ano", each Date.Year([Data]), Int64.Type),
-    MesNome = Table.AddColumn(Ano, "Anomes", each Date.ToText(Date.From([Data]), "MMM")& "-" & Text.From([Ano])),
+    MesNome = Table.AddColumn(Ano, "Anomes", each Text.From(Date.Year([Data])) & "-" & Text.PadStart(Text.From(Date.Month([Data])), 2, "0")),
     DiaSemana = Table.AddColumn(MesNome, "DiaSemana", each Date.DayOfWeekName([Data]))
 in
     DiaSemana
